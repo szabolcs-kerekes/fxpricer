@@ -1,0 +1,53 @@
+---
+title: "Vignette Title"
+author: "Vignette Author"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+TBA
+
+```{r binancer, fig.show='hold'}
+library(binancer)
+coin_prices <- binance_klines('BTCUSDT', interval = '1d', limit = 45)
+str(coin_prices)
+
+balance <- coin_prices[, .(date = as.Date(close_time), btcusd = close)]
+balance
+
+```
+
+TBA
+
+```{r eur_prices, fig.show='hold'}
+library(fxpricer)
+library(data.table)
+fx <- eurusds(Sys.Date() - 45, Sys.Date())
+setkey(balance, date)
+setkey(fx, date)
+balance <- fx[balance, roll = TRUE]
+balance[, btceur := btcusd * eurusd,]
+head(balance)
+```
+
+TBA
+
+```{r plotting, fig.show='hold'}
+library(ggplot2)
+ggplot(data = balance, aes(x = date, y = btceur)) +
+  geom_line() +
+  scale_y_continuous(labels = eur)
+```
+
+TBA
