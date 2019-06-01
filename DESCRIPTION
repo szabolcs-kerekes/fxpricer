@@ -1,10 +1,10 @@
 Package: fxpricer
 Type: Package
 Title: This packages provides functions for FX conversions
-Version: 0.1.0
+Version: 1.0.0
 Author: Szabolcs Kerekes
 Maintainer: Szabolcs Kerekes <kerekes_szabolcs@student.ceu.edu>
-Description: TBA
+Description: The packages includes several functions, which can be used for converting value formatting to and from €, and getting EURUSD exchange rates.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true

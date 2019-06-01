@@ -1,6 +1,6 @@
 ---
-title: "Vignette Title"
-author: "Vignette Author"
+title: "Using the 'eurusds' and 'eur' functions"
+author: "Szabolcs Kerekes"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
 vignette: >
@@ -16,38 +16,39 @@ knitr::opts_chunk$set(
 )
 ```
 
-TBA
+This vignette shows examples of using the `fxpricer::eurusds` and `fxpricer::eur` functions with the `binancer` package. The aim is create a chart of the total daily BTC asset volume measured in EUR for the last 45 days. As the first step we import daily BTCUSD prices via the binancer API. 
 
 ```{r binancer, fig.show='hold'}
 library(binancer)
+library(data.table)
 coin_prices <- binance_klines('BTCUSDT', interval = '1d', limit = 45)
 str(coin_prices)
 
-balance <- coin_prices[, .(date = as.Date(close_time), btcusd = close)]
-balance
-
+balance <- coin_prices[, .(date = as.Date(close_time), btcusd = close, volume_usd = volume)]
+head(balance)
 ```
 
-TBA
+As the next step we import the fxpricer package, from which we use the `fxpricer::eurusds` function to import the EURUSD historical exchanges rates (which we need for converting the BTCUSD prices to BTCEUR). The `fxpricer::eurusds` function takes two required inputs, the start date and the end date for the period (and has one hidden input which is used for rounding). We use the imported EURUSD exchange rates to calculate the EUR values of the BTC dates for the given day.
 
 ```{r eur_prices, fig.show='hold'}
 library(fxpricer)
-library(data.table)
 fx <- eurusds(Sys.Date() - 45, Sys.Date())
 setkey(balance, date)
 setkey(fx, date)
 balance <- fx[balance, roll = TRUE]
-balance[, btceur := btcusd * eurusd,]
+balance[, volume_eur := volume_usd * btcusd * eurusd,]
 head(balance)
 ```
 
-TBA
+As the final step we need to create the chart of the BTCEUR rates. For this we use the `fxpricer::eur` function, which converts the given value to a string type value starting that includes the '€' sign.
 
 ```{r plotting, fig.show='hold'}
 library(ggplot2)
-ggplot(data = balance, aes(x = date, y = btceur)) +
-  geom_line() +
-  scale_y_continuous(labels = eur)
+ggplot(data = balance, aes(x = date, y = volume_eur)) +
+  geom_line(color = 'blue') +
+  scale_y_continuous(labels = eur) +
+  theme_bw() +
+  labs(title = 'Total BTC asset value in the last 45 days', x = 'EUR value', y = 'day')
 ```
 
-TBA
+As it can be seen above the final chart has '€' signs included on the left hand axis.

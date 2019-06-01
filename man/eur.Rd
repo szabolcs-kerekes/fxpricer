@@ -19,3 +19,6 @@ Value in € format
 eur(10000)
 eur(1234.5678)
 }
+\seealso{
+uneur()
+}

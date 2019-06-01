@@ -5,6 +5,7 @@
 #' @examples
 #' eur(10000)
 #' eur(1234.5678)
+#' @seealso uneur()
 
 eur <- function(amount){
   input <- round(amount, 2)
