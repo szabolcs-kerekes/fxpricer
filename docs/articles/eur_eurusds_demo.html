@@ -5,11 +5,11 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Vignette Title • fxpricer</title>
+<title>Using the ‘eurusds’ and ‘eur’ functions • fxpricer</title>
 <!-- jquery --><script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script><!-- Bootstrap --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha256-916EbMg70RQy9LHiGkXzG8hSg9EdNy97GazNG/aiY1w=" crossorigin="anonymous">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha256-U5ZEeKfGNOja007MMD3YBI0A3OSZOQbeG6z2f2Y0hu8=" crossorigin="anonymous"></script><!-- Font Awesome icons --><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous">
 <!-- clipboard.js --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.4/clipboard.min.js" integrity="sha256-FiZwavyI2V6+EXO1U+xzLG3IKldpiTFf3153ea9zikQ=" crossorigin="anonymous"></script><!-- sticky kit --><script src="https://cdnjs.cloudflare.com/ajax/libs/sticky-kit/1.1.3/sticky-kit.min.js" integrity="sha256-c4Rlo1ZozqTPE2RLuvbusY3+SU1pQaJC0TjuhygMipw=" crossorigin="anonymous"></script><!-- pkgdown --><link href="../pkgdown.css" rel="stylesheet">
-<script src="../pkgdown.js"></script><meta property="og:title" content="Vignette Title">
+<script src="../pkgdown.js"></script><meta property="og:title" content="Using the ‘eurusds’ and ‘eur’ functions">
 <meta property="og:description" content="">
 <meta name="twitter:card" content="summary">
 <!-- mathjax --><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha256-nvJJv9wWKEm88qvoQl9ekL2J+k/RWIsaSScxxlsrv8k=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/config/TeX-AMS-MML_HTMLorMML.js" integrity="sha256-84DKXVJXs0/F8OTMzX4UR909+jtl4G7SPypPavF+GfA=" crossorigin="anonymous"></script><!--[if lt IE 9]>
@@ -30,7 +30,7 @@
       </button>
       <span class="navbar-brand">
         <a class="navbar-link" href="../index.html">fxpricer</a>
-        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">0.1.0</span>
+        <span class="version label label-default" data-toggle="tooltip" data-placement="bottom" title="Released version">1.0.0</span>
       </span>
     </div>
 
@@ -53,7 +53,7 @@
   </a>
   <ul class="dropdown-menu" role="menu">
 <li>
-      <a href="../articles/eur_eurusds_demo.html">Vignette Title</a>
+      <a href="../articles/eur_eurusds_demo.html">Using the 'eurusds' and 'eur' functions</a>
     </li>
   </ul>
 </li>
@@ -70,10 +70,10 @@
       </header><div class="row">
   <div class="col-md-9 contents">
     <div class="page-header toc-ignore">
-      <h1>Vignette Title</h1>
-                        <h4 class="author">Vignette Author</h4>
+      <h1>Using the ‘eurusds’ and ‘eur’ functions</h1>
+                        <h4 class="author">Szabolcs Kerekes</h4>
             
-            <h4 class="date">2019-05-20</h4>
+            <h4 class="date">2019-06-01</h4>
       
       
       <div class="hidden name"><code>eur_eurusds_demo.Rmd</code></div>
@@ -82,97 +82,59 @@
 
     
     
-<p>TBA</p>
+<p>This vignette shows examples of using the <code><a href="../reference/eurusds.html">fxpricer::eurusds</a></code> and <code><a href="../reference/eur.html">fxpricer::eur</a></code> functions with the <code>binancer</code> package. The aim is create a chart of the total daily BTC asset volume measured in EUR for the last 45 days. As the first step we import daily BTCUSD prices via the binancer API.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(binancer)
+<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(data.table)
 coin_prices &lt;-<span class="st"> </span><span class="kw"><a href="https://www.rdocumentation.org/packages/binancer/topics/binance_klines">binance_klines</a></span>(<span class="st">'BTCUSDT'</span>, <span class="dt">interval =</span> <span class="st">'1d'</span>, <span class="dt">limit =</span> <span class="dv">45</span>)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/str">str</a></span>(coin_prices)
 <span class="co">#&gt; Classes 'data.table' and 'data.frame':   45 obs. of  12 variables:</span>
-<span class="co">#&gt;  $ open_time                   : POSIXct, format: "2019-04-06 02:00:00" "2019-04-07 02:00:00" ...</span>
-<span class="co">#&gt;  $ open                        : num  5005 5042 5170 5238 5150 ...</span>
-<span class="co">#&gt;  $ high                        : num  5205 5234 5305 5238 5422 ...</span>
-<span class="co">#&gt;  $ low                         : num  4929 5026 5039 5077 5135 ...</span>
-<span class="co">#&gt;  $ close                       : num  5044 5170 5237 5150 5308 ...</span>
-<span class="co">#&gt;  $ volume                      : num  41771 37615 50178 34067 40074 ...</span>
-<span class="co">#&gt;  $ close_time                  : POSIXct, format: "2019-04-07 01:59:59" "2019-04-08 01:59:59" ...</span>
-<span class="co">#&gt;  $ quote_asset_volume          : num  2.11e+08 1.93e+08 2.60e+08 1.76e+08 2.11e+08 ...</span>
-<span class="co">#&gt;  $ trades                      : num  281237 274084 350828 253381 260967 ...</span>
-<span class="co">#&gt;  $ taker_buy_base_asset_volume : num  21796 19505 25302 16967 21270 ...</span>
-<span class="co">#&gt;  $ taker_buy_quote_asset_volume: num  1.10e+08 1.00e+08 1.31e+08 8.75e+07 1.12e+08 ...</span>
+<span class="co">#&gt;  $ open_time                   : POSIXct, format: "2019-04-18 02:00:00" "2019-04-19 02:00:00" ...</span>
+<span class="co">#&gt;  $ open                        : num  5202 5258 5259 5293 5257 ...</span>
+<span class="co">#&gt;  $ high                        : num  5287 5320 5333 5314 5400 ...</span>
+<span class="co">#&gt;  $ low                         : num  5199 5175 5230 5165 5208 ...</span>
+<span class="co">#&gt;  $ close                       : num  5258 5259 5292 5256 5357 ...</span>
+<span class="co">#&gt;  $ volume                      : num  22619 24611 19169 25550 29564 ...</span>
+<span class="co">#&gt;  $ close_time                  : POSIXct, format: "2019-04-19 01:59:59" "2019-04-20 01:59:59" ...</span>
+<span class="co">#&gt;  $ quote_asset_volume          : num  1.19e+08 1.29e+08 1.01e+08 1.34e+08 1.57e+08 ...</span>
+<span class="co">#&gt;  $ trades                      : num  167110 178148 157080 210494 210361 ...</span>
+<span class="co">#&gt;  $ taker_buy_base_asset_volume : num  12105 12890 10029 13148 15828 ...</span>
+<span class="co">#&gt;  $ taker_buy_quote_asset_volume: num  63464129 67549701 53029543 68909871 83879362 ...</span>
 <span class="co">#&gt;  $ symbol                      : chr  "BTCUSDT" "BTCUSDT" "BTCUSDT" "BTCUSDT" ...</span>
 <span class="co">#&gt;  - attr(*, ".internal.selfref")=&lt;externalptr&gt;</span>
 
-balance &lt;-<span class="st"> </span>coin_prices[, .(<span class="dt">date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(close_time), <span class="dt">btcusd =</span> close)]
-balance
-<span class="co">#&gt;           date  btcusd</span>
-<span class="co">#&gt;  1: 2019-04-06 5043.89</span>
-<span class="co">#&gt;  2: 2019-04-07 5170.27</span>
-<span class="co">#&gt;  3: 2019-04-08 5236.90</span>
-<span class="co">#&gt;  4: 2019-04-09 5150.00</span>
-<span class="co">#&gt;  5: 2019-04-10 5308.25</span>
-<span class="co">#&gt;  6: 2019-04-11 5017.37</span>
-<span class="co">#&gt;  7: 2019-04-12 5048.01</span>
-<span class="co">#&gt;  8: 2019-04-13 5045.22</span>
-<span class="co">#&gt;  9: 2019-04-14 5131.30</span>
-<span class="co">#&gt; 10: 2019-04-15 5024.95</span>
-<span class="co">#&gt; 11: 2019-04-16 5173.72</span>
-<span class="co">#&gt; 12: 2019-04-17 5202.82</span>
-<span class="co">#&gt; 13: 2019-04-18 5258.44</span>
-<span class="co">#&gt; 14: 2019-04-19 5258.68</span>
-<span class="co">#&gt; 15: 2019-04-20 5291.73</span>
-<span class="co">#&gt; 16: 2019-04-21 5256.14</span>
-<span class="co">#&gt; 17: 2019-04-22 5357.14</span>
-<span class="co">#&gt; 18: 2019-04-23 5493.31</span>
-<span class="co">#&gt; 19: 2019-04-24 5415.00</span>
-<span class="co">#&gt; 20: 2019-04-25 5219.90</span>
-<span class="co">#&gt; 21: 2019-04-26 5314.10</span>
-<span class="co">#&gt; 22: 2019-04-27 5295.69</span>
-<span class="co">#&gt; 23: 2019-04-28 5307.52</span>
-<span class="co">#&gt; 24: 2019-04-29 5238.14</span>
-<span class="co">#&gt; 25: 2019-04-30 5320.81</span>
-<span class="co">#&gt; 26: 2019-05-01 5383.20</span>
-<span class="co">#&gt; 27: 2019-05-02 5492.87</span>
-<span class="co">#&gt; 28: 2019-05-03 5772.69</span>
-<span class="co">#&gt; 29: 2019-05-04 5829.45</span>
-<span class="co">#&gt; 30: 2019-05-05 5775.62</span>
-<span class="co">#&gt; 31: 2019-05-06 5747.79</span>
-<span class="co">#&gt; 32: 2019-05-07 5846.34</span>
-<span class="co">#&gt; 33: 2019-05-08 5987.29</span>
-<span class="co">#&gt; 34: 2019-05-09 6209.18</span>
-<span class="co">#&gt; 35: 2019-05-10 6373.33</span>
-<span class="co">#&gt; 36: 2019-05-11 7076.22</span>
-<span class="co">#&gt; 37: 2019-05-12 6967.31</span>
-<span class="co">#&gt; 38: 2019-05-13 7790.71</span>
-<span class="co">#&gt; 39: 2019-05-14 7947.56</span>
-<span class="co">#&gt; 40: 2019-05-15 8169.87</span>
-<span class="co">#&gt; 41: 2019-05-16 7866.59</span>
-<span class="co">#&gt; 42: 2019-05-17 7355.26</span>
-<span class="co">#&gt; 43: 2019-05-18 7257.45</span>
-<span class="co">#&gt; 44: 2019-05-19 8148.48</span>
-<span class="co">#&gt; 45: 2019-05-20 7791.25</span>
-<span class="co">#&gt;           date  btcusd</span></code></pre></div>
-<p>TBA</p>
+balance &lt;-<span class="st"> </span>coin_prices[, .(<span class="dt">date =</span> <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/as.Date">as.Date</a></span>(close_time), <span class="dt">btcusd =</span> close, <span class="dt">volume_usd =</span> volume)]
+<span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(balance)
+<span class="co">#&gt;          date  btcusd volume_usd</span>
+<span class="co">#&gt; 1: 2019-04-18 5258.44   22619.24</span>
+<span class="co">#&gt; 2: 2019-04-19 5258.68   24611.24</span>
+<span class="co">#&gt; 3: 2019-04-20 5291.73   19168.91</span>
+<span class="co">#&gt; 4: 2019-04-21 5256.14   25549.57</span>
+<span class="co">#&gt; 5: 2019-04-22 5357.14   29563.85</span>
+<span class="co">#&gt; 6: 2019-04-23 5493.31   41262.10</span></code></pre></div>
+<p>As the next step we import the fxpricer package, from which we use the <code><a href="../reference/eurusds.html">fxpricer::eurusds</a></code> function to import the EURUSD historical exchanges rates (which we need for converting the BTCUSD prices to BTCEUR). The <code><a href="../reference/eurusds.html">fxpricer::eurusds</a></code> function takes two required inputs, the start date and the end date for the period (and has one hidden input which is used for rounding). We use the imported EURUSD exchange rates to calculate the EUR values of the BTC dates for the given day.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(fxpricer)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(data.table)
 fx &lt;-<span class="st"> </span><span class="kw"><a href="../reference/eurusds.html">eurusds</a></span>(<span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.Date</a></span>() <span class="op">-</span><span class="st"> </span><span class="dv">45</span>, <span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/Sys.time">Sys.Date</a></span>())
 <span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/setkey">setkey</a></span>(balance, date)
 <span class="kw"><a href="https://www.rdocumentation.org/packages/data.table/topics/setkey">setkey</a></span>(fx, date)
 balance &lt;-<span class="st"> </span>fx[balance, roll =<span class="st"> </span><span class="ot">TRUE</span>]
-balance[, btceur <span class="op">:</span><span class="er">=</span><span class="st"> </span>btcusd <span class="op">*</span><span class="st"> </span>eurusd,]
+balance[, volume_eur <span class="op">:</span><span class="er">=</span><span class="st"> </span>volume_usd <span class="op">*</span><span class="st"> </span>btcusd <span class="op">*</span><span class="st"> </span>eurusd,]
 <span class="kw"><a href="https://www.rdocumentation.org/packages/utils/topics/head">head</a></span>(balance)
-<span class="co">#&gt;          date eurusd  btcusd   btceur</span>
-<span class="co">#&gt; 1: 2019-04-06 0.8902 5043.89 4490.071</span>
-<span class="co">#&gt; 2: 2019-04-07 0.8902 5170.27 4602.574</span>
-<span class="co">#&gt; 3: 2019-04-08 0.8892 5236.90 4656.651</span>
-<span class="co">#&gt; 4: 2019-04-09 0.8868 5150.00 4567.020</span>
-<span class="co">#&gt; 5: 2019-04-10 0.8866 5308.25 4706.294</span>
-<span class="co">#&gt; 6: 2019-04-11 0.8878 5017.37 4454.421</span></code></pre></div>
-<p>TBA</p>
+<span class="co">#&gt;          date eurusd  btcusd volume_usd volume_eur</span>
+<span class="co">#&gt; 1: 2019-04-18 0.8889 5258.44   22619.24  105727465</span>
+<span class="co">#&gt; 2: 2019-04-19 0.8889 5258.68   24611.24  115043764</span>
+<span class="co">#&gt; 3: 2019-04-20 0.8889 5291.73   19168.91   90167071</span>
+<span class="co">#&gt; 4: 2019-04-21 0.8889 5256.14   25549.57  119372267</span>
+<span class="co">#&gt; 5: 2019-04-22 0.8889 5357.14   29563.85  140781934</span>
+<span class="co">#&gt; 6: 2019-04-23 0.8893 5493.31   41262.10  201573654</span></code></pre></div>
+<p>As the final step we need to create the chart of the BTCEUR rates. For this we use the <code><a href="../reference/eur.html">fxpricer::eur</a></code> function, which converts the given value to a string type value starting that includes the ‘€’ sign.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="https://www.rdocumentation.org/packages/base/topics/library">library</a></span>(ggplot2)
-<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="dt">data =</span> balance, <span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> date, <span class="dt">y =</span> btceur)) <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>() <span class="op">+</span>
-<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous">scale_y_continuous</a></span>(<span class="dt">labels =</span> eur)</code></pre></div>
+<span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggplot">ggplot</a></span>(<span class="dt">data =</span> balance, <span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/aes">aes</a></span>(<span class="dt">x =</span> date, <span class="dt">y =</span> volume_eur)) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/geom_path">geom_line</a></span>(<span class="dt">color =</span> <span class="st">'blue'</span>) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/scale_continuous">scale_y_continuous</a></span>(<span class="dt">labels =</span> eur) <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/ggtheme">theme_bw</a></span>() <span class="op">+</span>
+<span class="st">  </span><span class="kw"><a href="https://www.rdocumentation.org/packages/ggplot2/topics/labs">labs</a></span>(<span class="dt">title =</span> <span class="st">'Total BTC asset value in the last 45 days'</span>, <span class="dt">x =</span> <span class="st">'EUR value'</span>, <span class="dt">y =</span> <span class="st">'day'</span>)</code></pre></div>
 <p><img src="eur_eurusds_demo_files/figure-html/plotting-1.png" width="700"></p>
-<p>TBA</p>
+<p>As it can be seen above the final chart has ‘€’ signs included on the left hand axis.</p>
   </div>
 
   <div class="col-md-3 hidden-xs hidden-sm" id="sidebar">
